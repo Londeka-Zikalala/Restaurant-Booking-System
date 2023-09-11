@@ -3,7 +3,22 @@ import pgp from "pg-promise";
 import exphbs from "express-handlebars";
 import bodyParser from "body-parser";
 import flash from "flash-express";
+import dotenv from 'dotenv';
+dotenv.config();
 
+const pgPromise = pgp();
+
+// should we use a SSL connection
+let useSSL = false;
+let local = process.env.LOCAL || false;
+if (process.env.DATABASE_URL && !local) {
+    useSSL = true;
+}
+// which db connection to use
+const connectionString = process.env.DATABASE_URL;
+
+const db = pgPromise(connectionString);
+db.connect();
 const app = express()
 
 app.use(express.static('public'));
