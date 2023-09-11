@@ -24,56 +24,56 @@ describe("The restaurant booking table", function () {
         assert.deepEqual([{
             "booked": false,
             "capacity": 4,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 1,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table one",
-            "username": [null]
+            "username": null
         },
         {
             "booked": false,
             "capacity": 6,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 2,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table two",
-            "username": [null]
+            "username": null
         },
         {
             "booked": false,
             "capacity": 4,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 3,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table three",
-            "username": [null]
+            "username": null
         },
         {
             "booked": false,
             "capacity": 2,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 4,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table four",
-            "username": [null]
+            "username": null
         },
         {
             "booked": false,
             "capacity": 6,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 5,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table five",
-            "username": [null]
+            "username": null
         },
         {
             "booked": false,
             "capacity": 4,
-            "contact_number": [null],
+            "contact_number": null,
             "id": 6,
-            "number_of_people": [null],
+            "number_of_people": null,
             "table_name": "Table six",
-            "username": [null]
+            "username": null
         }
         ]
 

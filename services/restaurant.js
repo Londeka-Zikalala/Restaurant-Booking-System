@@ -12,8 +12,26 @@ const restaurant = (db) => {
         }
     }
 
-    async function bookTable(tableName) {
+    async function bookTable(bookingDetails) {
+    
+       const{
+            tableName,username,phoneNumber,seats
+        } = bookingDetails;
         // book a table by name
+        try{
+            let availableTable = await db.oneOrNone('SELECT * FROM table_booking WHERE table_name = $1 AND booked = $2',[tableName, false]);
+            //check if the table is available and the people fit the capacity
+            if(availableTable && seats <= availableTable.capacity && username === null && phoneNumber === null){
+                //book the table
+                await db.none('UPDATE table_booking SET booked=$1, username = $2, number_of_people = $3, contact_number =$4 WHERE table_name = $5',[true,tableName,username,phoneNumber,seats])
+            }
+        }
+        catch(error){
+            console.error('Error booking table', error)
+            throw error
+        }
+
+
     }
     //update the table booking 
     async function editTableBooking(tableName){
@@ -21,19 +39,62 @@ const restaurant = (db) => {
     }
 
     async function getBookedTables() {
-        // get all the booked tables
+        // get all the tables where booked = true
+        try{
+          let bookedTable =  await db.any('SELECT * FROM table_booking WHERE booked = $1', true)
+          return bookedTable;
+        }
+        catch(error){
+            console.error('Error fetching tables', error)
+            throw error
+        }
+
     }
 
     async function isTableBooked(tableName) {
         // get booked table by name
+        //check if booked = true
+        try{
+            let bookedTable =  await db.any('SELECT * FROM table_booking WHERE booked = $1  AND table_name = $2',[true, tableName]);
+            if(bookedTable){
+                return bookedTable, true;
+                
+            }else if(!bookedTable)
+            return false, bookedTable;
+          }
+          catch(error){
+              console.error('Error fetching tables', error)
+              throw error
+          }
+  
     }
 
     async function cancelTableBooking(tableName) {
         // cancel a table by name
+        try{
+            //get the bookked table
+            await db.oneOrNone('SELECT * FROM table_booking WHERE table_name = $1 AND booked = $2',[tableName, true])
+            //update the table
+            await db.none('UPDATE table_booking SET booked=$1, username = $2, number_of_people = $3, contact_number =$4 WHERE table_name = $5',[false,null,null,null,tableName])
+
+        }
+        catch(error){
+            console.error('Error updating tables', error)
+            throw error
+        }
+        
     }
 
     async function getBookedTablesForUser(username) {
         // get user table booking
+        try {
+            //get booked tables using the username
+            let bookedTables = await db.any('SELECT * FROM table_booking WHERE username = $1 AND booked = $2', [username, true]);
+            return bookedTables;
+        } catch (error) {
+            console.error('Error getting booked tables for user', error);
+            throw error;
+        }
     }
 
 
