@@ -1,4 +1,5 @@
 # Restaurant-Booking-System 
+[![Node.js CI](https://github.com/Londeka-Zikalala/Restaurant-Booking-System/actions/workflows/node.js.yml/badge.svg)](https://github.com/Londeka-Zikalala/Restaurant-Booking-System/actions/workflows/node.js.yml)
 
 **Scenario**: Restaurant Booking System Assessment
 
