@@ -2,7 +2,7 @@ import assert from "assert"
 import RestaurantTableBooking from "../services/restaurant.js";
 import pgPromise from 'pg-promise';
 
-const DATABASE_URL = '';
+const DATABASE_URL = 'postgres://oeuchvrp:KvJxUu1wPMyQ_vmJKQdVMf-lk4VAE9K3@dumbo.db.elephantsql.com/oeuchvrp';
 
 const connectionString = process.env.DATABASE_URL || DATABASE_URL;
 const db = pgPromise()(connectionString);
@@ -19,9 +19,65 @@ describe("The restaurant booking table", function () {
     });
 
     it("Get all the available tables", async function () {
-        const restaurantTableBooking = await RestaurantTableBooking(db);
+        const restaurantTableBooking = RestaurantTableBooking(db);
 
-        assert.deepEqual([{}, {}, {}, {}, {}], await restaurantTableBooking.getTables());
+        assert.deepEqual([{
+            "booked": false,
+            "capacity": 4,
+            "contact_number": [null],
+            "id": 1,
+            "number_of_people": [null],
+            "table_name": "Table one",
+            "username": [null]
+        },
+        {
+            "booked": false,
+            "capacity": 6,
+            "contact_number": [null],
+            "id": 2,
+            "number_of_people": [null],
+            "table_name": "Table two",
+            "username": [null]
+        },
+        {
+            "booked": false,
+            "capacity": 4,
+            "contact_number": [null],
+            "id": 3,
+            "number_of_people": [null],
+            "table_name": "Table three",
+            "username": [null]
+        },
+        {
+            "booked": false,
+            "capacity": 2,
+            "contact_number": [null],
+            "id": 4,
+            "number_of_people": [null],
+            "table_name": "Table four",
+            "username": [null]
+        },
+        {
+            "booked": false,
+            "capacity": 6,
+            "contact_number": [null],
+            "id": 5,
+            "number_of_people": [null],
+            "table_name": "Table five",
+            "username": [null]
+        },
+        {
+            "booked": false,
+            "capacity": 4,
+            "contact_number": [null],
+            "id": 6,
+            "number_of_people": [null],
+            "table_name": "Table six",
+            "username": [null]
+        }
+        ]
+
+            , await restaurantTableBooking.getTables());
     });
 
 
@@ -107,7 +163,7 @@ describe("The restaurant booking table", function () {
         let restaurantTableBooking = await RestaurantTableBooking(db);
 
         assert.deepEqual([], await restaurantTableBooking.getBookedTablesForUser('jodie'));
-        
+
         restaurantTableBooking.bookTable({
             tableName: 'Table five',
             username: 'Jodie',

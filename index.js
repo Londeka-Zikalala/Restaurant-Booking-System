@@ -4,6 +4,7 @@ import exphbs from "express-handlebars";
 import bodyParser from "body-parser";
 import flash from "flash-express";
 import dotenv from 'dotenv';
+import restaurant from "./services/restaurant.js";
 dotenv.config();
 
 const pgPromise = pgp();
@@ -20,6 +21,8 @@ const connectionString = process.env.DATABASE_URL;
 const db = pgPromise(connectionString);
 db.connect();
 const app = express()
+const restaurantTableBooking = restaurant(db);
+
 
 app.use(express.static('public'));
 app.use(flash());
@@ -36,9 +39,19 @@ const handlebarSetup = exphbs.engine({
 app.engine('handlebars', handlebarSetup);
 app.set('view engine', 'handlebars');
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    try{
+        //Use the getTables function to get available tables
+        const tables = await restaurantTableBooking.getTables()
 
-    res.render('index', { tables : [{}, {}, {booked : true}, {}, {}, {}]})
+        res.render('index', { tables })
+    } 
+    catch(error){
+        console.error('Error fetching tables', error)
+        req.flash('error','Error fetching tables')
+        res.redirect('/')
+    }
+ 
 });
 
 
