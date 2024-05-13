@@ -51,7 +51,6 @@ app.get("/", async (req, res) => {
 
         res.render('index', { tables,
             messages: req.flash() })
-         console.log(tables)
     } 
     catch(error){
         console.error('Error fetching tables', error)
@@ -68,16 +67,19 @@ app.post('/book', async (req, res)=>{
     const phoneNumber = req.body.phone_number;
     const seats = req.body.booking_size;
 
+    await restaurantTableBooking.isTableBooked(tableName)
         //make a booking
-        const booked = await restaurantTableBooking.bookTable({tableName, username, phoneNumber, seats})
-        
-        // Update the list of tables
-        const tables = await restaurantTableBooking.getTables();
+    const booked = await restaurantTableBooking.bookTable({ tableName, username, phoneNumber, seats });
 
-        req.flash('success', 'Booking successful')
+        if (booked) {
+            req.flash('success', 'Booking successful');
+        } else {
+            req.flash('error', 'Table not available');
+        }
+
+        const tables = await restaurantTableBooking.getTables();
         res.render('index', {
             tables,
-            booked,
             messages: req.flash()
         })
        
@@ -90,6 +92,7 @@ app.post('/book', async (req, res)=>{
 })
 app.get('/bookings', async (req, res) => {
     try {
+
         const bookedTables = await restaurantTableBooking.getBookedTables();
 
         res.render('bookings', { bookedTables });
